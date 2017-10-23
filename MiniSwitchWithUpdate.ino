@@ -166,6 +166,7 @@ void wemoCB(uint8_t pin, uint8_t level) {
     Serial.printf("Switch %d turn %d ...\r\n", pin, level);
     digitalWrite(pin, level);
 }
+
 /*
 void allOn() {
   Serial.print("all lights on ...");
