@@ -14,24 +14,15 @@
 #include "WemoManager.h"
 #include "CallbackFunction.h"
 
-#include <ArduinoJson.h>
-
 #define DEBUG 1
 
 #define CONFIG_VERSION "v01"
 
 // prototypes
 boolean connectWifi();
-void officeLightsOn() ;
-void officeLightsOff();
-void kitchenLightsOn();
-void kitchenLightsOff();
-void ledOn();
-void ledOff();
-void redOn();
-void redOff();
-void lightOn();
-void lightOff();
+void wemoCB(uint8_t pin, uint8_t level);
+void allOn();
+void allOff();
 
 const char* host = "esp8266-webupdate";
 //const char* ssid = "WLAN1_Guest1";
@@ -86,8 +77,25 @@ int lastButtonState = LOW;
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
 
-void setup(void){
+struct RelayInfo {
+	String name;
+	int pin;
+	uint port;
+	boolean reverse;
+};
 
+#define NUM_RELAYS 7
+RelayInfo relays[NUM_RELAYS] = {
+	{ String("office lights"), relayPin1, 90, false },
+	{ String("kitchen lights"), relayPin2, 91, false },
+	{ String("coffee light"), ledPin, 92, true },
+	{ String("red light"), redLED, 93, false },
+	{ String("yellow light"), yellowLED, 94, false },
+	{ String("green light"), greenLED, 95, false },
+	{ String("all light"), -1, 96, false }
+};
+
+void setup(void){
   Serial.begin(115200);
   Serial.println();
   Serial.println("Booting Sketch...");
@@ -112,7 +120,7 @@ void setup(void){
 
   String clientName;
   uint8_t mac[6];
-  clientName += macToStr(mac);
+  clientName += macToStr((unsigned char *) mac);
   clientName += "-";
   clientName += String(micros() & 0xff, 16);
   Serial.print("MQTT client id:");
@@ -139,21 +147,11 @@ void setup(void){
   */
   
   wemoManager.begin();
-  // Format: Alexa invocation name, local port no, on callback, off callback
-  wemoManager.addDevice(new WemoSwitch("office lights", 90, officeLightsOn, officeLightsOff));
-  wemoManager.addDevice(new WemoSwitch("kitchen lights", 91, kitchenLightsOn, kitchenLightsOff));
-  wemoManager.addDevice(new WemoSwitch("coffee light", 92, ledOn, ledOff));
-  wemoManager.addDevice(new WemoSwitch("red light", 93, redOn, redOff));
-  wemoManager.addDevice(new WemoSwitch("yellow light", 94, yellowOn, yellowOff));
-  wemoManager.addDevice(new WemoSwitch("green light", 95, greenOn, greenOff));
-  wemoManager.addDevice(new WemoSwitch("all lights", 96, allOn, allOff));
-  
-  pinMode(relayPin1, OUTPUT);
-  pinMode(relayPin2, OUTPUT);
-  pinMode(ledPin, OUTPUT);
-  pinMode(redLED, OUTPUT);
-  pinMode(yellowLED, OUTPUT);
-  pinMode(greenLED, OUTPUT);
+  // Format: Alexa invocation name, pin, local port no, callback, reverse (HIGH and LOW)
+  for (int i = 0; i < NUM_RELAYS; i++) {
+	  wemoManager.addDevice(new WemoSwitch(relays[i].name, relays[i].pin, relays[i].port, wemoCB));
+	  pinMode(relays[i].pin, OUTPUT);
+  }
   delay(10);
   digitalWrite(ledPin, HIGH); // Wemos BUILTIN_LED is active Low, so high is off
   Serial.println("Finished setup()");
@@ -164,66 +162,11 @@ void loop(void) {
   wemoManager.serverLoop();
 }
 
-void officeLightsOn() {
-    Serial.print("Switch 1 turn on ...");
-    digitalWrite(relayPin1, HIGH);
+void wemoCB(uint8_t pin, uint8_t level) {
+    Serial.printf("Switch %d turn %d ...\r\n", pin, level);
+    digitalWrite(pin, level);
 }
-
-void officeLightsOff() {
-    Serial.print("Switch 1 turn off ...");
-    digitalWrite(relayPin1, LOW);
-}
-
-void kitchenLightsOn() {
-    Serial.print("Switch 2 turn on ...");
-    digitalWrite(relayPin2, HIGH);
-}
-
-void kitchenLightsOff() {
-  Serial.print("Switch 2 turn off ...");
-  digitalWrite(relayPin2, LOW);
-}
-
-void ledOn() {
-    Serial.print("LED turn on ...");
-    digitalWrite(ledPin, LOW);
-}
-
-void ledOff() {
-  Serial.print("LED turn off ...");
-  digitalWrite(ledPin, HIGH);
-}
-
-void redOn() {
-    Serial.print("red LED turn on ...");
-    digitalWrite(redLED, HIGH);
-}
-
-void redOff() {
-  Serial.print("red LED turn off ...");
-  digitalWrite(redLED, LOW);
-}
-
-void yellowOn() {
-    Serial.print("yellow LED turn on ...");
-    digitalWrite(yellowLED, HIGH);
-}
-
-void yellowOff() {
-  Serial.print("yellow LED turn off ...");
-  digitalWrite(yellowLED, LOW);
-}
-
-void greenOn() {
-    Serial.print("green LED turn on ...");
-    digitalWrite(greenLED, HIGH);
-}
-
-void greenOff() {
-  Serial.print("green LED turn off ...");
-  digitalWrite(greenLED, LOW);
-}
-
+/*
 void allOn() {
   Serial.print("all lights on ...");
   officeLightsOn();
@@ -243,7 +186,7 @@ void allOff() {
   yellowOff();
   greenOff();
 }
-
+*/
 
 void changeStatus(int ind,int newStatus) {
     Serial.printf("Changing status ind %d new status %d", ind, newStatus);
@@ -274,7 +217,7 @@ void changeStatus(int ind,int newStatus) {
       }  
 }
 
-String macToStr(const uint8_t* mac) {
+String macToStr(uint8_t* mac) {
   String result;
   for (int i = 0; i < 6; ++i) {
     result += String(mac[i], 16);
