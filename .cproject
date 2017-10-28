@@ -39,12 +39,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/ESP8266HTTPClient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/Hash/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/pubsubclient}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/pubsubclient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/esp8266-alexa-wemo-emulator}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/esp8266-alexa-wemo-emulator/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.216943682" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -70,12 +68,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/ESP8266HTTPClient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/Hash/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/pubsubclient}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/pubsubclient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/esp8266-alexa-wemo-emulator}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/esp8266-alexa-wemo-emulator/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.1988997425" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -101,12 +97,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/ESP8266HTTPClient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/Hash/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/pubsubclient}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/pubsubclient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/esp8266-alexa-wemo-emulator}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/esp8266-alexa-wemo-emulator/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MiniSwitchWithUpdate/libraries/MQTT/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.1352419849" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
@@ -132,5 +126,10 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/MiniSwitchWithUpdate"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

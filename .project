@@ -101,10 +101,5 @@
 			<type>2</type>
 			<location>C:/Users/rs/Arduino/libraries/esp8266-alexa-wemo-emulator</location>
 		</link>
-		<link>
-			<name>libraries/pubsubclient</name>
-			<type>2</type>
-			<location>C:/Users/rs/Arduino/libraries/pubsubclient</location>
-		</link>
 	</linkedResources>
 </projectDescription>

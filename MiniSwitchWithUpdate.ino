@@ -7,7 +7,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266HTTPUpdateServer.h>
-#include <MQTT.h>
+//#include <MQTT.h>
 #include <EEPROM.h>
 
 #include "WemoSwitch.h"
@@ -21,12 +21,8 @@
 // prototypes
 boolean connectWifi();
 void wemoCB(uint8_t pin, uint8_t level);
-void allOn();
-void allOff();
 
 const char* host = "esp8266-webupdate";
-//const char* ssid = "WLAN1_Guest1";
-//const char* password = "Locoto100";
 #define AP_SSID "WLAN1_Guest1"
 #define AP_PASSWD "Locoto100"
 
@@ -35,7 +31,7 @@ const char* eiocloud_passwd = "Locoto100";
 
 const char* eiocloud_host = "cloud.iot-playground.com";
 const int eiocloud_port = 1883;
-// MQTT myMqtt("", eiocloud_host, eiocloud_port);
+//MQTT myMqtt("", eiocloud_host, eiocloud_port);
 
 WemoManager wemoManager;
 
@@ -62,17 +58,12 @@ struct StoreStruct {
   AP_PASSWD
 };
 
+/* MQTT
 bool stepOk = false;
 int buttonState;
-
-boolean result;
 String topic("");
-String valueStr("");
-
 boolean switchState;
-const int buttonPin = 0;  
-const int outPin = 2;  
-int lastButtonState = LOW; 
+*/
 
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
@@ -84,16 +75,17 @@ struct RelayInfo {
 	boolean reverse;
 };
 
-#define NUM_RELAYS 7
-RelayInfo relays[NUM_RELAYS] = {
+// #define NUM_RELAYS 7
+RelayInfo myRelays[] = {
 	{ String("office lights"), relayPin1, 90, false },
 	{ String("kitchen lights"), relayPin2, 91, false },
 	{ String("coffee light"), ledPin, 92, true },
 	{ String("red light"), redLED, 93, false },
 	{ String("yellow light"), yellowLED, 94, false },
 	{ String("green light"), greenLED, 95, false },
-	{ String("all light"), -1, 96, false }
+	{ String("all light"), 100, 96, false }
 };
+const int NUM_MY_RELAYS = sizeof(myRelays) / sizeof(RelayInfo);
 
 void setup(void){
   Serial.begin(115200);
@@ -148,9 +140,10 @@ void setup(void){
   
   wemoManager.begin();
   // Format: Alexa invocation name, pin, local port no, callback, reverse (HIGH and LOW)
-  for (int i = 0; i < NUM_RELAYS; i++) {
-	  wemoManager.addDevice(new WemoSwitch(relays[i].name, relays[i].pin, relays[i].port, wemoCB));
-	  pinMode(relays[i].pin, OUTPUT);
+  Serial.printf("Initializing %d relays...\r\n", NUM_MY_RELAYS);
+  for (int i = 0; i < NUM_MY_RELAYS; i++) {
+	  wemoManager.addDevice(new WemoSwitch(myRelays[i].name, myRelays[i].pin, myRelays[i].port, wemoCB));
+	  pinMode(myRelays[i].pin, OUTPUT);
   }
   delay(10);
   digitalWrite(ledPin, HIGH); // Wemos BUILTIN_LED is active Low, so high is off
@@ -163,31 +156,19 @@ void loop(void) {
 }
 
 void wemoCB(uint8_t pin, uint8_t level) {
-    Serial.printf("Switch %d turn %d ...\r\n", pin, level);
-    digitalWrite(pin, level);
+  if (pin == 100) {
+	  for (int i = 0; i < NUM_MY_RELAYS; i++) {
+		  if (myRelays[i].pin != -1) {
+			  Serial.printf("Switch %d turn %d ...\r\n", myRelays[i].pin, level);
+			  digitalWrite(pin, level);
+		  }
+	  }
+  }
+  else {
+		Serial.printf("Switch %d turn %d ...\r\n", pin, level);
+		digitalWrite(pin, level);
+	}
 }
-
-/*
-void allOn() {
-  Serial.print("all lights on ...");
-  officeLightsOn();
-  kitchenLightsOn();
-  ledOn();
-  redOn();
-  yellowOn();
-  greenOn();
-}
-
-void allOff() {
-  Serial.print("all lights off ...");
-  officeLightsOff();
-  kitchenLightsOff();
-  ledOff();
-  redOff();
-  yellowOff();
-  greenOff();
-}
-*/
 
 void changeStatus(int ind,int newStatus) {
     Serial.printf("Changing status ind %d new status %d", ind, newStatus);
